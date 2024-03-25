@@ -26,8 +26,15 @@ class LessonAdmin(admin.ModelAdmin):
         <img src='/static/{img_url}' alt='{alt}' width='120px' />
         '''.format(img_url=lesson.image.name, alt=lesson.subject))
 
+class LessonInlineAdmin(admin.StackedInline):
+    model = Lesson
+    fk_name = 'course' #tên khóa ngoại trong Models Lesson có course
+
+class CourseAdmin(admin.ModelAdmin):
+    inlines = [LessonInlineAdmin, ]
+
 
 # Register your models here.
 admin.site.register(Category)
-admin.site.register(Course)
+admin.site.register(Course, CourseAdmin)#trong khóa học hện các bài học liên quan
 admin.site.register(Lesson, LessonAdmin)
