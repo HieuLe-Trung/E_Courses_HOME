@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.db.models import Count
+from django.template.response import TemplateResponse
+from django.urls import path
 from django.utils.html import mark_safe
 from django import forms
 from ckeditor_uploader.widgets \
@@ -14,7 +17,8 @@ class LessonForm(forms.ModelForm):  # tạo ra 1 form có thanh cong cụ như w
         fields = '__all__'
 
 
-class LessonTagInlineAdmin(admin.TabularInline):  # trong Lesson có nhiều tag, add các tag liên quan VÀ TRONG CÁC TAG CÓ NHIỀU LESSON
+class LessonTagInlineAdmin(
+    admin.TabularInline):  # trong Lesson có nhiều tag, add các tag liên quan VÀ TRONG CÁC TAG CÓ NHIỀU LESSON
     model = Lesson.tags.through
 
 
@@ -45,8 +49,28 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     inlines = [LessonTagInlineAdmin]
 
+
+class CourseAppAdminSite(admin.AdminSite):
+    site_title = 'Trang quản trị của tôi'
+    site_header = 'Hệ thống khóa học trực tuyến'
+    index_title = 'Trang chủ quản trị'
+
+    def get_urls(self):
+        return [path('course-stats/', self.stats_view)] + super().get_urls()#/course-stats để render ra trang course-stats.html
+
+    def stats_view(self, request):  # Thêm tham số 'request' vào đây
+        course_count = Course.objects.count()
+        #đếm mỗi khóa học có bao nhiêu bài học:
+        stats = Course.objects.annotate(lesson_count=Count('lessons')).values('id','subject','lesson_count')
+        return TemplateResponse(request, 'admin/course-stats.html',
+                                {'course_count': course_count,# truyền số Course vào template
+                                         'course_stats':stats})
+
+
+admin_site = CourseAppAdminSite(name='mycourse')
+
 # Register your models here.
-admin.site.register(Category)
-admin.site.register(Course, CourseAdmin)  # trong khóa học hện các bài học liên quan
-admin.site.register(Lesson, LessonAdmin)
-admin.site.register(Tag,TagAdmin)
+admin_site.register(Category)
+admin_site.register(Course, CourseAdmin)  # trong khóa học hện các bài học liên quan
+admin_site.register(Lesson, LessonAdmin)
+admin_site.register(Tag, TagAdmin)
