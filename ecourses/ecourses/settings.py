@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     #khai bao ten app: dang duong dan tu tenapp di vao apps.py trong do co classs CoursesConfig
     'ckeditor',
     'ckeditor_uploader',
-    'rest_framework'
+    'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
