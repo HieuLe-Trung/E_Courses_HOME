@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+import cloudinary
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,7 +42,8 @@ INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     #khai bao ten app: dang duong dan tu tenapp di vao apps.py trong do co classs CoursesConfig
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +57,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ecourses.urls'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'djkg7qktn',
+    'API_KEY': '761645745792171',
+    'API_SECRET': '8L4nP4-nW_5boss5jgFfXX9iFUc'
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 TEMPLATES = [
     {

@@ -3,8 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from ckeditor.fields import RichTextField
 
 class User(AbstractUser):
-    avatar = models.ImageField(upload_to='uploads/%Y/%m', default=None)
-
+    # avatar = models.ImageField(upload_to='uploads/%Y/%m', default=None)
+    avatar = models.ImageField(upload_to='postImageCourse')
 
 class Category(models.Model):
     name = models.CharField(max_length=100,null=False,unique=True)
@@ -16,7 +16,8 @@ class itemBase(models.Model): #tạo lớp abstract(các lớp có trường chu
     class Meta:
         abstract = True
     subject = models.CharField(max_length=100, null=False)
-    image = models.ImageField(upload_to='uploads/%Y/%m', default=None)
+    # image = models.ImageField(upload_to='uploads/%Y/%m', default=None)
+    image = models.ImageField(upload_to='postImageCourse')
     created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
