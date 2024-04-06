@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, parsers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Course, Lesson
+from .models import Course, Lesson, User
 from .serializers import CourseSerializer, LessonSerializer
 from courses import serializers, paginators
 
@@ -36,6 +36,15 @@ class LessonViewSet(viewsets.ViewSet, generics.ListAPIView):
         return queries
 
 
+# chỉ lấy 1 bài hoc
+class LessonViewSet2(viewsets.ViewSet, generics.RetrieveAPIView):  # RetrieveAPIView: lấy dữ lieu từ 1 obj cụ thể
+    queryset = Lesson.objects.filter(active=True).all()
+    serializer_class = LessonSerializer
+
+class UserViewSet(viewsets.ViewSet,generics.CreateAPIView): #post nên dùng create
+    queryset = User.objects.filter(is_active=True).all()
+    serializer_class = serializers.UserSerializer
+    parser_classes = [parsers.MultiPartParser] #dùng để upload hình ảnh
 def index(request):
     return HttpResponse("Hello world!!!!")
 

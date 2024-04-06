@@ -5,7 +5,9 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('courses',views.CourseViewSet)
-router.register('lessons',views.LessonViewSet)
+router.register('lessons',views.LessonViewSet,basename='lessons')
+router.register('lesson',views.LessonViewSet2,basename='lesson')
+router.register('user',views.UserViewSet)
 
 urlpatterns = [
     path('',include(router.urls), name="index"),
