@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from .models import Course, Lesson, Tag, User
+from .models import Course, Lesson, Tag, User,Comment
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -40,3 +40,10 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password((data['password']))  # băm
         user.save()
         return user
+
+
+class CommentSerializers(serializers.ModelSerializer):
+    user = UserSerializer
+    class Meta:
+        model = Comment
+        fields = ['id','content','user'] #lấy user=UserSerializer bỏ vô

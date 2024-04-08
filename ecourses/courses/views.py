@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from oauth2_provider.contrib.rest_framework import permissions
-from rest_framework import viewsets, generics, parsers,permissions
+from rest_framework import viewsets, generics, parsers, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Course, Lesson, User
+from .models import Course, Lesson, User, Comment
 from .serializers import CourseSerializer, LessonSerializer
 from courses import serializers, paginators
 
@@ -41,6 +41,21 @@ class LessonViewSet(viewsets.ViewSet, generics.ListAPIView):
 class LessonViewSet2(viewsets.ViewSet, generics.RetrieveAPIView):  # RetrieveAPIView: lấy dữ lieu từ 1 obj cụ thể
     queryset = Lesson.objects.filter(active=True).all()
     serializer_class = LessonSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_permissions(self):
+        if self.action in ['add_comment']:
+            return [permissions.IsAuthenticated()]
+        return self.permission_classes
+    #thêm cmt vào 1 lesson truyền vào
+    # Url: /lessons/{lesson_id}/add_comment/
+    @action(methods=['post'],url_name='add_comment',detail=True)
+    def add_comment(self,request,pk):#khi trên urls có /id thì gọi urls add_comment
+        c = Comment.objects.create(user=request.user,
+                                   lesson=self.get_object(),
+                                   content=request.data.get('content'))#user đã được chung thực trong request.user
+                                             #cmt trong chính bài học queryset
+        return Response(serializers.CommentSerializers(c).data,status=status.HTTP_201_CREATED)
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # post nên dùng create
