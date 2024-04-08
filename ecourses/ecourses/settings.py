@@ -17,7 +17,6 @@ import cloudinary
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -29,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,13 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'courses.apps.CoursesConfig',
-    #khai bao ten app: dang duong dan tu tenapp di vao apps.py trong do co classs CoursesConfig
+    # khai bao ten app: dang duong dan tu tenapp di vao apps.py trong do co classs CoursesConfig
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',
     'drf_yasg',
+    'oauth2_provider',
 ]
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -83,7 +86,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecourses.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -98,7 +100,7 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'courses.User'
-#teenapp.User thực hiện chứng thực
+# teenapp.User thực hiện chứng thực
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -118,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -130,15 +131,16 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
 MEDIA_ROOT = '%s/courses/static/' % BASE_DIR
-CKEDITOR_UPLOAD_PATH = "lessons/" #làm việc trong static/lessons
+CKEDITOR_UPLOAD_PATH = "lessons/"  # làm việc trong static/lessons
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CLIENT_ID = 'x4sPFvqnTXCEzKd3gY7S7CzuYdwOdK7EdHWnQurD'
+CLIENT_SECRET = '7QpkCofBEf6CEZNZPimhqFbPhKehWwIkwBrrx9elW4IBbW6riZyVyFolCxm2V2bar7RmHFMLHl5lNXlODeGyEACCP6ClPtz9auetGdoX2gMPzuOtbb8ggC8rIU5irKQC='

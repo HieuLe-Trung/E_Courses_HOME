@@ -37,6 +37,7 @@ urlpatterns = [
     # dau tien vao day thay path rong thi vao urls cua courses
     path('', include('courses.urls')),
     path('admin/', admin.site.urls),
+    path('o/', include('oauth2_provider.urls',namespace='oauth2_provider')),
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),
