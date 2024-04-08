@@ -142,5 +142,6 @@ CKEDITOR_UPLOAD_PATH = "lessons/"  # làm việc trong static/lessons
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 CLIENT_ID = 'x4sPFvqnTXCEzKd3gY7S7CzuYdwOdK7EdHWnQurD'
 CLIENT_SECRET = '7QpkCofBEf6CEZNZPimhqFbPhKehWwIkwBrrx9elW4IBbW6riZyVyFolCxm2V2bar7RmHFMLHl5lNXlODeGyEACCP6ClPtz9auetGdoX2gMPzuOtbb8ggC8rIU5irKQC='
