@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework import viewsets, generics, parsers
+from oauth2_provider.contrib.rest_framework import permissions
+from rest_framework import viewsets, generics, parsers,permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -41,10 +42,23 @@ class LessonViewSet2(viewsets.ViewSet, generics.RetrieveAPIView):  # RetrieveAPI
     queryset = Lesson.objects.filter(active=True).all()
     serializer_class = LessonSerializer
 
-class UserViewSet(viewsets.ViewSet,generics.CreateAPIView): #post nên dùng create
+
+class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # post nên dùng create
     queryset = User.objects.filter(is_active=True).all()
     serializer_class = serializers.UserSerializer
-    parser_classes = [parsers.MultiPartParser] #dùng để upload hình ảnh
+    parser_classes = [parsers.MultiPartParser]  # dùng để upload hình ảnh
+
+
+    #2 hàm get_permiss và current_user để xem thông tin user đó đã được xác thực chưa
+    def get_permissions(self):
+        if self.action.__eq__('current_user'):
+            return [permissions.IsAuthenticated()]
+        return [permissions.AllowAny()]
+
+    @action(methods=['get'],url_name='current_user', detail=False)
+    def current_user(self,request):
+        return Response(serializers.UserSerializer(request.user).data)
+
 def index(request):
     return HttpResponse("Hello world!!!!")
 
