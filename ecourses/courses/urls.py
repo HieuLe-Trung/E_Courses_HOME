@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register('courses',views.CourseViewSet)
 router.register('lessons',views.LessonViewSet,basename='lessons')
 router.register('lesson',views.LessonViewSet2,basename='lesson')
+router.register('comments', views.CommentViewSet, basename='comments')
 router.register('user',views.UserViewSet)
 
 urlpatterns = [
