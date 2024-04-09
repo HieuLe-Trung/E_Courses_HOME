@@ -58,7 +58,7 @@ class LessonViewSet2(viewsets.ViewSet, generics.RetrieveAPIView):  # RetrieveAPI
         return Response(serializers.CommentSerializers(c).data,status=status.HTTP_201_CREATED)
     @action(methods=['post'], url_name='like', detail=True)
     def like(self, request, pk):
-        like, created = Like.objects.create_or_update(user=request.user, lesson=self.get_object())
+        like, created = Like.objects.get_or_create(user=request.user, lesson=self.get_object())
         #if user đó like lesson rồi thì created = False và ngược lại
         if not created:#TH user vào post like rồi thì created=True, khi like lại thì phủ định active lại
             like.active = not like.active
