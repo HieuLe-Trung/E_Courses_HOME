@@ -75,7 +75,7 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # post nên dùng 
         return Response(serializers.UserSerializer(request.user).data)
 
 
-class CommentViewSet(viewsets.ViewSet,generics.DestroyAPIView):
+class CommentViewSet(viewsets.ViewSet,generics.DestroyAPIView,generics.UpdateAPIView):
     queryset = Comment.objects.all()
     serializer_class = serializers.CommentSerializers
     permission_classes = [perms.OwnerAuthenticated]#kiểm tra user có quyền xóa 1 cmt hay ko
