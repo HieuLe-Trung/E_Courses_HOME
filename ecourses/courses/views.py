@@ -5,7 +5,7 @@ from rest_framework import viewsets, generics, parsers, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Course, Lesson, User, Comment
+from .models import Course, Lesson, User, Comment,Like
 from .serializers import CourseSerializer, LessonSerializer
 from courses import serializers, paginators,perms
 
@@ -44,7 +44,7 @@ class LessonViewSet2(viewsets.ViewSet, generics.RetrieveAPIView):  # RetrieveAPI
     permission_classes = [permissions.AllowAny]
 
     def get_permissions(self):
-        if self.action in ['add_comment']:
+        if self.action in ['add_comment','like']:
             return [permissions.IsAuthenticated()]
         return self.permission_classes
     #thêm cmt vào 1 lesson truyền vào
@@ -56,8 +56,14 @@ class LessonViewSet2(viewsets.ViewSet, generics.RetrieveAPIView):  # RetrieveAPI
                                    content=request.data.get('content'))#user đã được chung thực trong request.user
                                              #cmt trong chính bài học queryset
         return Response(serializers.CommentSerializers(c).data,status=status.HTTP_201_CREATED)
-
-
+    @action(methods=['post'], url_name='like', detail=True)
+    def like(self, request, pk):
+        like, created = Like.objects.create_or_update(user=request.user, lesson=self.get_object())
+        #if user đó like lesson rồi thì created = False và ngược lại
+        if not created:#TH user vào post like rồi thì created=True, khi like lại thì phủ định active lại
+            like.active = not like.active
+            like.save()
+        return Response(status=status.HTTP_200_OK)
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # post nên dùng create
     queryset = User.objects.filter(is_active=True).all()
     serializer_class = serializers.UserSerializer
